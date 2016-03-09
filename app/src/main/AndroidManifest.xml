@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ListaActivity"
+            android:label="@string/title_activity_lista" >
+        </activity>
+        <activity
+            android:name=".IngresaItemActivity"
+            android:label="@string/title_activity_ingresa_item" >
+        </activity>
     </application>
 
 </manifest>
