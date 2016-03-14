@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ItemPicnic {
 
+
     @SerializedName("id")
     @Expose
     public int id;

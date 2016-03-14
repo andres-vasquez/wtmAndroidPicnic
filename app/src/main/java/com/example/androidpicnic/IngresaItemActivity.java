@@ -1,37 +1,46 @@
 package com.example.androidpicnic;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 
-public class IngresaItemActivity extends AppCompatActivity {
+import com.google.zxing.Result;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
+public class IngresaItemActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+
+    //Elemento de interfaz ESCANER
+    private ZXingScannerView mScannerView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ingresa_item);
+    public void onCreate(Bundle state) {
+        super.onCreate(state);
+        //Inicializamos el Escaner de códigos
+        mScannerView = new ZXingScannerView(this);
+        setContentView(mScannerView);
     }
 
+    //Cuando la App se cierra, detiene la camara
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_ingresa_item, menu);
-        return true;
+    public void onPause() {
+        super.onPause();
+        mScannerView.stopCamera();
     }
 
+    //Cuando la App se pone activa, activa la camara
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this);
+        mScannerView.startCamera();
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    //Si detecta un código lo muestra
+    public void handleResult(Result rawResult) {
+        Intent intent=new Intent();
+        intent.putExtra("codigo", rawResult.getText()); //Encapsula el resultado en la variable código
+        setResult(RESULT_OK,intent); // !Importante. Devuelve resultado como OK
+        finish();
     }
 }
